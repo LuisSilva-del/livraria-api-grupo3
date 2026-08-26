@@ -1,0 +1,19 @@
+{
+  "name": "livraria-api-grupo3",
+  "version": "1.0.0",
+  "description": "API de Livraria - Projeto em Grupo",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": ["livraria", "api", "mvc"],
+  "author": "Grupo 3",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
