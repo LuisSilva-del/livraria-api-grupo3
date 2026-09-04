@@ -14,3 +14,32 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 ## Tecnologias
 - Node.js
 - npm
+
+## Diagrama de Classes (UML)
+
+```mermaid
+classDiagram
+    class Pessoa {
+        +String nome
+        +String email
+        +apresentar()
+    }
+    class Cliente {
+        +Number saldo
+        +apresentar()
+    }
+    class Funcionario {
+        +Number salario
+        +apresentar()
+    }
+    class Categoria {
+        +String nome
+    }
+    class Livro {
+        +String titulo
+        +Number preco
+    }
+
+    Pessoa <|-- Cliente
+    Pessoa <|-- Funcionario
+    Livro "1..*" o-- "1" Categoria
