@@ -39,7 +39,40 @@ classDiagram
         +String titulo
         +Number preco
     }
+    class LivroFisico {
+        +Number peso
+        +Number frete
+    }
+    class LivroDigital {
+        +Number tamanhoMB
+        +String formato
+    }
+    class Carrinho {
+        +Array itens
+        +adicionarItem()
+        +removerItem()
+    }
+    class ItemPedido {
+        +Number quantidade
+        +Number precoUnitario
+    }
+    class Pedido {
+        +Date data
+        +String status
+        +calcularTotal()
+    }
+    class Periodo {
+        +Date dataInicio
+        +Date dataFim
+    }
 
     Pessoa <|-- Cliente
     Pessoa <|-- Funcionario
+    Livro <|-- LivroFisico
+    Livro <|-- LivroDigital
     Livro "1..*" o-- "1" Categoria
+    Carrinho "1" o-- "*" ItemPedido
+    Pedido "1" o-- "1..*" ItemPedido
+    ItemPedido "*" --> "1" Livro
+    Cliente "1" --> "*" Pedido
+    Pedido "*" --> "1" Periodo
