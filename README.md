@@ -4,7 +4,7 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 ## Integrantes
 - Luis Miguel Pereira da Silva — @Luis Silva-del
 - Ana Laura Aparecida Miranda Cardoso — @Ana
-- Victor Gonçalves da Silva — @Gonçalves918
+- Victor dos Santos Gonçalves da Silva — @Gonçalves918
 - Maria Eduarda da Silva Mendes  — @madumendes21
 ## Divisão de responsabilidades
 | Bloco | Integrante | O que ficou sob responsabilidade dele(a) |
