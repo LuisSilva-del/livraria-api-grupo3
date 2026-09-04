@@ -17,8 +17,11 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 
 ## Diagrama de Classes (UML)
 
+<div align="center">
+
 ```mermaid
 classDiagram
+    direction TB
     class Pessoa {
         +String nome
         +String email
