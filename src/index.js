@@ -1,14 +1,11 @@
-const express = require("express");
+const express = require('express');
+const livroRoutes = require('./routes/livroRoutes');
 
 const app = express();
-const PORT = 3000;
-
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("API da Livraria no ar!");
-});
+app.use("/livros", livroRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log('Servidor rodando em http://localhost:3000');
 });
