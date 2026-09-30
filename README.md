@@ -25,6 +25,24 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 - Express
 - npm
 
+## Tabela de Verificação das Rotas (Atividade 12 — Parte 2)
+
+| Método | URL | Status Esperado | Status Obtido |
+| :--- | :--- | :---: | :---: |
+| GET | /livros | 200 | 200 |
+| GET | /livros/0 | 200 | 200 |
+| GET | /livros/99 | 404 | 404 |
+| POST | /livros | 201 | 201 |
+| PUT | /livros/0 | 200 | 200 |
+| PATCH | /livros/0 | 200 | 200 |
+| DELETE | /livros/0 | 204 | 204 |
+| GET | /livros/0 (depois do DELETE) | 404 | 404 |
+
+## Experimento do Cabeçalho (Atividade 12 — Parte 3)
+
+* **Status retornado:** `500 Internal Server Error`
+* **Explicação:** O erro ocorreu porque, ao enviar a requisição sem o cabeçalho `Content-Type: application/json`, o servidor Express não consegue identificar o formato dos dados recebidos no corpo (body). Com isso, o `req.body` passa a chegar como `undefined`, fazendo com que o sistema quebre ao tentar acessar as propriedades do livro que não existem.
+
 ## Diagrama de Classes (UML)
 
 ```mermaid
@@ -88,8 +106,3 @@ classDiagram
     Cliente "1" --> "*" Pedido
     Pedido "*" --> "1" Periodo
 ```
-
-## Experimento do Cabeçalho (Atividade 12 — Parte 3)
-
-- **Status retornado:** 500 Internal Server Error (ou dados salvos como `undefined`).
-- **Explicação:** O status ocorreu porque, ao enviar a requisição sem o cabeçalho `Content-Type: application/json`, o Express não consegue identificar o formato dos dados enviados. Com isso, o `req.body` fica vazio ou indefinido, impedindo o servidor de ler e salvar as propriedades do livro corretamente.
