@@ -2,4 +2,18 @@
 // Aqui vao ficar os caminhos (endpoints) relacionados a Livro.
 // Ex: GET /livros, POST /livros
 // Implementacao chega no Bloco 3, quando o banco de dados entrar.
-module.exports = {};
+
+const express = require("express");
+const livroController = require("../controllers/livroController");
+
+const router = express.Router();
+
+router.get("/", livroController.listar);
+router.get("/:indice", livroController.buscarPorIndice);
+router.post("/", livroController.criar);
+
+// CORRIGIDO: Removidas as linhas duplicadas/vazias que sobrescreviam o módulo
+module.exports = router; 
+
+
+
