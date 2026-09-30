@@ -1,14 +1,19 @@
+
 const express = require('express');
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const express = require("express");
+const livroRoutes = require("./routes/livroRoutes");
 
 const app = express();
 const DEFAULT_PORT = 3000;
 const PORT = process.env.PORT || DEFAULT_PORT;
 
 app.use(express.json());
+
 app.use(logger);
+app.use("/livros", livroRoutes);
 
 app.get('/', (req, res) => {
   res.send('API da Livraria no ar!');

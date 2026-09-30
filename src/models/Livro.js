@@ -3,6 +3,7 @@ class Livro {
   #titulo;
   #autor;
   #preco;
+<<<<<<< HEAD
   #estoque;
 
   constructor(id, titulo, autor, preco, estoque) {
@@ -19,6 +20,15 @@ class Livro {
 
   set id(novoId) {
     this.#id = novoId;
+=======
+  #estoque; // ADICIONADO: Declaração do campo privado
+
+  constructor(titulo, autor, preco, estoque) { // ADICIONADO: estoque recebido aqui
+    this.#titulo = titulo;
+    this.#autor = autor;
+    this.#preco = preco;
+    this.#estoque = estoque; // ADICIONADO: estoque salvo aqui
+>>>>>>> 470bf339a568571b58189f1e61a8967f1cf48e07
   }
 
   get titulo() {
@@ -45,6 +55,10 @@ class Livro {
     this.#preco = novoPreco;
   }
 
+<<<<<<< HEAD
+=======
+  // ADICIONADO: Getter e Setter para o estoque funcionar perfeitamente
+>>>>>>> 470bf339a568571b58189f1e61a8967f1cf48e07
   get estoque() {
     return this.#estoque;
   }
@@ -55,11 +69,18 @@ class Livro {
 
   toJSON() {
     return {
+<<<<<<< HEAD
       id: this.#id,
       titulo: this.#titulo,
       autor: this.#autor,
       preco: this.#preco,
       estoque: this.#estoque,
+=======
+      titulo: this.titulo,
+      autor: this.autor,
+      preco: this.preco,
+      estoque: this.estoque 
+>>>>>>> 470bf339a568571b58189f1e61a8967f1cf48e07
     };
   }
 }
