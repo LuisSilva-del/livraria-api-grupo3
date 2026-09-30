@@ -1,23 +1,20 @@
-// CONTROLLER (o "chef"): decide o que fazer com cada pedido.
-// Recebe da rota, chama o service certo, devolve a resposta.
-// Implementacao chega no Bloco 3.
-
 const livroService = require("../services/livroService");
 
 function listarLivros(req, res) {
-  const livros = livroService.listarTodos();
-  res.json(livros);
+  const filtros = req.query;
+  const livros = livroService.listarTodos(filtros);
+  res.status(200).json(livros);
 }
 
 function buscarLivroPorId(req, res) {
-  const { id } = req.params;
-  const livro = livroService.buscarPorId(id);
+  const { indice } = req.params;
+  const livro = livroService.buscarPorId(indice);
 
   if (!livro) {
     return res.status(404).json({ erro: "Livro nao encontrado" });
   }
 
-  res.json(livro);
+  res.status(200).json(livro);
 }
 
 function criar(req, res) {
@@ -26,24 +23,49 @@ function criar(req, res) {
 }
 
 function atualizarCompleto(req, res) {
-    let livro = livroService.atualizarCompletoLivro(req.params.id, req.body);
-    if (!livro) return res.status(404).json({ erro: "Livro nao encontrado" });
+  const { indice } = req.params;
+  let livro = livroService.atualizarCompletoLivro(indice, req.body);
 
-    res.json(livro);
+  if (!livro) {
+    return res.status(404).json({
+      erro: "Livro nao encontrado",
+    });
+  }
+
+  res.status(200).json(livro);
 }
 
 function atualizarParcial(req, res) {
-    let livro = livroService.atualizarParcialLivro(req.params.id, req.body);
-    if (!livro) return res.status(404).json({ erro: "Livro nao encontrado" });
+  const { indice } = req.params;
+  let livro = livroService.atualizarParcialLivro(indice, req.body);
 
-    res.json(livro);
+  if (!livro) {
+    return res.status(404).json({
+      erro: "Livro nao encontrado",
+    });
+  }
+
+  res.status(200).json(livro);
 }
 
 function deletar(req, res) {
-    let apagou = livroService.deletarLivro(req.params.id);
-    if (!apagou) return res.status(404).json({ erro: "Livro nao encontrado" });
-    
-    res.status(204).send();
+  const { indice } = req.params;
+  let apagou = livroService.deletarLivro(indice);
+
+  if (!apagou) {
+    return res.status(404).json({
+      erro: "Livro nao encontrado",
+    });
+  }
+
+  res.status(204).send();
 }
 
-module.exports = { listarLivros, buscarLivroPorId, criar, atualizarCompleto, atualizarParcial, deletar };
+module.exports = {
+  listarLivros,
+  buscarLivroPorId,
+  criar,
+  atualizarCompleto,
+  atualizarParcial,
+  deletar,
+};
