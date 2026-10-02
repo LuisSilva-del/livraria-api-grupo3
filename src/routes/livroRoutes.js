@@ -4,7 +4,6 @@
 // Implementacao chega no Bloco 3, quando o banco de dados entrar.
 
 const express = require("express");
-<<<<<<< HEAD
 const router = express.Router();
 const livroController = require("../controllers/livroController");
 
@@ -16,18 +15,7 @@ router.patch("/:id", livroController.atualizarParcial);
 router.delete("/:id", livroController.deletar);
 
 module.exports = router;
-=======
-const livroController = require("../controllers/livroController");
 
-const router = express.Router();
 
-router.get("/", livroController.listar);
-router.get("/:indice", livroController.buscarPorIndice);
-router.post("/", livroController.criar);
-
-// CORRIGIDO: Removidas as linhas duplicadas/vazias que sobrescreviam o módulo
-module.exports = router; 
-
->>>>>>> 470bf339a568571b58189f1e61a8967f1cf48e07
 
 

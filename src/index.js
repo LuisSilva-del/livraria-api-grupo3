@@ -1,5 +1,4 @@
 
-const express = require('express');
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
 const categoriaRoutes = require('./routes/categoriaRoutes');
