@@ -43,6 +43,10 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 * **Status retornado:** `500 Internal Server Error`
 * **Explicação:** O erro ocorreu porque, ao enviar a requisição sem o cabeçalho `Content-Type: application/json`, o servidor Express não consegue identificar o formato dos dados recebidos no corpo (body). Com isso, o `req.body` passa a chegar como `undefined`, fazendo com que o sistema quebre ao tentar acessar as propriedades do livro que não existem.
 
+## Cronograma do Projeto
+
+O cronograma da atividade de PSOF está em [`docs/cronograma.md`](docs/cronograma.md).
+
 ## Diagrama de Classes (UML)
 
 ```mermaid
