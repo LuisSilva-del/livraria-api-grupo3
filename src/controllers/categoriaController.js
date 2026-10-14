@@ -1,1 +1,1 @@
-module.exports = {};Z
+module.exports = {};

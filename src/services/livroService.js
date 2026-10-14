@@ -10,8 +10,7 @@ function listarTodos() {
 }
 
 function buscarPorId(indice) {
-  const i = Number(indice);
-  return livros[i] || null;
+  return livros[indice];
 }
 
 function listarLivros(filtros) {

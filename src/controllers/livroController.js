@@ -2,12 +2,12 @@ const livroService = require("../services/livroService");
 
 function listarLivros(req, res) {
   const filtros = req.query;
-  const livros = livroService.listarTodos(filtros);
+  const livros = livroService.listarLivros(filtros);
   res.status(200).json(livros);
 }
 
 function buscarLivroPorId(req, res) {
-  const { indice } = req.params;
+  const indice = req.params.id;
   const livro = livroService.buscarPorId(indice);
 
   if (!livro) {
@@ -23,8 +23,8 @@ function criar(req, res) {
 }
 
 function atualizarCompleto(req, res) {
-  const { indice } = req.params;
-  let livro = livroService.atualizarCompletoLivro(indice, req.body);
+  const { id } = req.params;
+  let livro = livroService.atualizarCompletoLivro(id, req.body);
 
   if (!livro) {
     return res.status(404).json({
@@ -36,8 +36,8 @@ function atualizarCompleto(req, res) {
 }
 
 function atualizarParcial(req, res) {
-  const { indice } = req.params;
-  let livro = livroService.atualizarParcialLivro(indice, req.body);
+  const { id } = req.params;
+  let livro = livroService.atualizarParcialLivro(id, req.body);
 
   if (!livro) {
     return res.status(404).json({
@@ -49,8 +49,8 @@ function atualizarParcial(req, res) {
 }
 
 function deletar(req, res) {
-  const { indice } = req.params;
-  let apagou = livroService.deletarLivro(indice);
+  const { id } = req.params;
+  let apagou = livroService.deletarLivro(id);
 
   if (!apagou) {
     return res.status(404).json({
