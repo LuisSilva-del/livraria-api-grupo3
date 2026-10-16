@@ -1,30 +1,31 @@
 const Livro = require("../models/Livro");
 
-const livros = [
-  new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 59.9, 10),
-  new Livro("1984", "George Orwell", 29.9, 15),
-];
+const livros = [];
+let proximoId = 1;
 
 function listarTodos() {
   return livros;
 }
 
-function buscarPorId(indice) {
-  return livros[indice];
+function buscarPorId(id) {
+  return livros.find((livro) => livro.id === Number(id));
 }
 
 function listarLivros(filtros) {
   let resultado = livros;
+  
   if (filtros.autor) {
     resultado = resultado.filter((livro) =>
       livro.autor.toLowerCase().includes(filtros.autor.toLowerCase()),
     );
   }
+  
   if (filtros.precoMax) {
     resultado = resultado.filter(
       (livro) => livro.preco <= Number(filtros.precoMax),
     );
   }
+  
   return resultado;
 }
 
@@ -35,34 +36,36 @@ function criarLivro(dados) {
     dados.preco,
     dados.estoque,
   );
+  novoLivro.id = proximoId;
+  proximoId++;
+  
   livros.push(novoLivro);
+
   return novoLivro;
 }
 
-function atualizarCompletoLivro(indice, dados) {
-  const i = Number(indice);
+function atualizarCompletoLivro(id, dados) {
+  const livro = buscarPorId(id);
   
-  if (i < 0 || i >= livros.length) {
+  if (!livro) {
     return null;
   }
-
-  livros[i].titulo = dados.titulo;
-  livros[i].autor = dados.autor;
-  livros[i].preco = dados.preco;
-  livros[i].estoque = dados.estoque;
   
-  return livros[i];
+  livro.titulo = dados.titulo;
+  livro.autor = dados.autor;
+  livro.preco = dados.preco;
+  livro.estoque = dados.estoque;
+  
+  return livro;
 }
 
-function atualizarParcialLivro(indice, dados) {
-  const i = Number(indice);
+function atualizarParcialLivro(id, dados) {
+  const livro = buscarPorId(id);
   
-  if (i < 0 || i >= livros.length) {
+  if (!livro) {
     return null;
   }
-
-  const livro = livros[i];
-
+  
   if (dados.titulo !== undefined) livro.titulo = dados.titulo;
   if (dados.autor !== undefined) livro.autor = dados.autor;
   if (dados.preco !== undefined) livro.preco = dados.preco;
@@ -71,16 +74,31 @@ function atualizarParcialLivro(indice, dados) {
   return livro;
 }
 
-function deletarLivro(indice) {
-  const i = Number(indice);
-
-  if (i < 0 || i >= livros.length) {
+function deletarLivro(id) {
+  const posicao = livros.findIndex((livro) => livro.id === Number(id));
+  
+  if (posicao === -1) {
     return false;
   }
 
-  livros.splice(i, 1);
+  livros.splice(posicao, 1);
+  
   return true;
 }
+
+criarLivro({
+  titulo: "Clean Code",
+  autor: "Robert C. Martin",
+  preco: 89.9,
+  estoque: 12,
+});
+
+criarLivro({
+  titulo: "Eloquent JavaScript",
+  autor: "Marijn Haverbeke",
+  preco: 45.0,
+  estoque: 20,
+});
 
 module.exports = {
   listarTodos,
