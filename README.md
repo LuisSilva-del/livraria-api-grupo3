@@ -1,23 +1,14 @@
 # API de Gestão da Livraria — Grupo 3
 
-Projeto da UC de Programação Back-End — Curso Técnico em Desenvolvimento de Sistemas
+Projeto da UC de Programação Back-End — Curso Técnico em Desenvolvimento de Sistemas  
 Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 
 ## Integrantes
 
-- Luis Miguel Pereira da Silva — @Luis Silva-del
+- Luis Miguel Pereira da Silva — @LuisSilva-del
 - Ana Laura Aparecida Miranda Cardoso — @Ana
 - Victor dos Santos Gonçalves da Silva — @Gonçalves918
 - Maria Eduarda da Silva Mendes — @madumendes21
-
-## Divisão de responsabilidades (Bloco 3 — Atividade 12)
-
-| Integrante                           | Responsável por                                            |
-| ------------------------------------ | ---------------------------------------------------------- |
-| Luis Miguel Pereira da Silva         | POST (criar)                                               |
-| Ana Laura Aparecida Miranda Cardoso  | PUT e PATCH (atualizar completo e parcial)                 |
-| Victor dos Santos Gonçalves da Silva | DELETE (apagar)                                            |
-| Maria Eduarda da Silva Mendes        | Testar tudo no Postman e preencher a tabela de verificação |
 
 ## Tecnologias
 
@@ -25,23 +16,63 @@ Escola SENAI "Santo Paschoal Crepaldi" — Turma 1-2026-SESI_DEV_OC_1
 - Express
 - npm
 
-## Tabela de Verificação das Rotas (Atividade 12 — Parte 2)
+## Como executar o projeto
 
-| Método | URL | Status Esperado | Status Obtido |
-| :--- | :--- | :---: | :---: |
-| GET | /livros | 200 | 200 |
-| GET | /livros/0 | 200 | 200 |
-| GET | /livros/99 | 404 | 404 |
-| POST | /livros | 201 | 201 |
-| PUT | /livros/0 | 200 | 200 |
-| PATCH | /livros/0 | 200 | 200 |
-| DELETE | /livros/0 | 204 | 204 |
-| GET | /livros/0 (depois do DELETE) | 404 | 404 |
+1. Clone o repositório.
+2. Abra a pasta do projeto no terminal.
+3. Instale as dependências:
 
-## Experimento do Cabeçalho (Atividade 12 — Parte 3)
+```bash
+npm install
+```
 
-* **Status retornado:** `500 Internal Server Error`
-* **Explicação:** O erro ocorreu porque, ao enviar a requisição sem o cabeçalho `Content-Type: application/json`, o servidor Express não consegue identificar o formato dos dados recebidos no corpo (body). Com isso, o `req.body` passa a chegar como `undefined`, fazendo com que o sistema quebre ao tentar acessar as propriedades do livro que não existem.
+4. Inicie a API:
+
+```bash
+npm run dev
+```
+
+A API utiliza armazenamento em memória. Por isso, os registros criados durante a execução são perdidos quando o servidor é reiniciado.
+
+## Rotas da API
+
+As rotas seguem o padrão REST: os recursos são identificados por nomes no plural, e o método HTTP indica a operação. As rotas que trabalham com um registro específico utilizam seu `id`, e não a posição dele no array.
+
+### Livros
+
+| Método | Rota | Descrição | Status esperado |
+| :--- | :--- | :--- | :---: |
+| GET | `/livros` | Lista os livros | 200 |
+| GET | `/livros/:id` | Busca um livro pelo ID | 200 ou 404 |
+| POST | `/livros` | Cadastra um livro | 201 |
+| PUT | `/livros/:id` | Atualiza todos os dados do livro | 200 ou 404 |
+| PATCH | `/livros/:id` | Atualiza parte dos dados do livro | 200 ou 404 |
+| DELETE | `/livros/:id` | Exclui um livro | 204 ou 404 |
+
+### Categorias
+
+| Método | Rota | Descrição | Status esperado |
+| :--- | :--- | :--- | :---: |
+| GET | `/categorias` | Lista as categorias | 200 |
+| GET | `/categorias/:id` | Busca uma categoria pelo ID | 200 ou 404 |
+| POST | `/categorias` | Cadastra uma categoria | 201 |
+| PUT | `/categorias/:id` | Atualiza todos os dados da categoria | 200 ou 404 |
+| PATCH | `/categorias/:id` | Atualiza parte dos dados da categoria | 200 ou 404 |
+| DELETE | `/categorias/:id` | Exclui uma categoria | 204 ou 404 |
+
+Os códigos de status indicam o resultado esperado de cada operação. O status efetivamente obtido deve ser confirmado durante os testes no Insomnia ou Postman.
+
+## IDs dos registros
+
+Os livros e as categorias recebem IDs sequenciais quando são criados. As operações de busca, atualização e exclusão utilizam esses IDs.
+
+O ID não representa a posição do registro na lista. Por isso, excluir um registro não altera os IDs dos outros e o contador não reutiliza automaticamente um ID excluído durante a mesma execução do servidor.
+
+## Testes
+
+Os endpoints podem ser testados pelo Insomnia ou Postman. Para testar um recurso existente, use seu ID na URL. Para verificar o tratamento de erro, tente consultar um ID que não exista; a API deve retornar `404 Not Found`.
+
+Ao enviar dados em requisições POST, PUT ou PATCH, utilize o corpo em JSON e o cabeçalho `Content-Type: application/json`.
 
 ## Cronograma do Projeto
 
@@ -67,10 +98,14 @@ classDiagram
     }
     class Categoria {
         +String nome
+        +String descricao
     }
     class Livro {
+        +Number id
         +String titulo
+        +String autor
         +Number preco
+        +Number estoque
     }
     class LivroFisico {
         +Number peso
@@ -103,7 +138,7 @@ classDiagram
     Pessoa <|-- Funcionario
     Livro <|-- LivroFisico
     Livro <|-- LivroDigital
-    Livro "1..*" o-- "1" Categoria
+    Livro "*" --> "1" Categoria
     Carrinho "1" o-- "*" ItemPedido
     Pedido "1" o-- "1..*" ItemPedido
     ItemPedido "*" --> "1" Livro
