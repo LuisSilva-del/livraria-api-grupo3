@@ -1,7 +1,10 @@
-const express = require('express');
-const livroRouter = require('./livroRoutes'); 
-
+const express = require("express");
 const router = express.Router();
 
-router.use('/livros', livroRouter);
+const livroRoutes = require("./livroRoutes");
+const categoriaRoutes = require("./categoriaRoutes");
+
+router.use("/livros", livroRoutes);
+router.use("/categorias", categoriaRoutes);
+
 module.exports = router;
