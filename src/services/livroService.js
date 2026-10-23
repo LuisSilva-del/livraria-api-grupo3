@@ -82,6 +82,34 @@ function deletarLivro(indice) {
   return true;
 }
 
+// 💻 NOVA FUNÇÃO DE VALIDAÇÃO PARA A ATIVIDADE 16
+function validarLivro(dados, completo) {
+  if (!dados) return "Envie os dados do livro em JSON";
+
+  if (completo && !dados.titulo) return "O titulo e obrigatorio";
+  if (completo && !dados.autor) return "O autor e obrigatorio";
+
+  if (dados.preco !== undefined) {
+    if (typeof dados.preco !== "number" || isNaN(dados.preco)) {
+      return "O preco deve ser um numero";
+    }
+    if (dados.preco < 0) {
+      return "O preco nao pode ser negativo";
+    }
+  }
+
+  if (dados.estoque !== undefined) {
+    if (typeof dados.estoque !== "number" || isNaN(dados.estoque)) {
+      return "O estoque deve ser um numero";
+    }
+    if (dados.estoque < 0) {
+      return "O estoque nao pode ser negativo";
+    }
+  }
+
+  return null;
+}
+
 module.exports = {
   listarTodos,
   buscarPorId,
@@ -90,4 +118,6 @@ module.exports = {
   atualizarCompletoLivro,
   atualizarParcialLivro,
   deletarLivro,
+  validarLivro, // ⚠️ Linha adicionada para exportar a validação
 };
+

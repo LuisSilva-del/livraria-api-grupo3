@@ -18,11 +18,23 @@ function buscarLivroPorId(req, res) {
 }
 
 function criar(req, res) {
+  // 💻 Validação para criar (todos os campos obrigatórios: true)
+  const erro = livroService.validarLivro(req.body, true);
+  if (erro) {
+    return res.status(400).json({ erro: erro });
+  }
+
   const novoLivro = livroService.criarLivro(req.body);
   res.status(201).json(novoLivro);
 }
 
 function atualizarCompleto(req, res) {
+  // 💻 Validação para substituir tudo (todos os campos obrigatórios: true)
+  const erro = livroService.validarLivro(req.body, true);
+  if (erro) {
+    return res.status(400).json({ erro: erro });
+  }
+
   const { id } = req.params;
   let livro = livroService.atualizarCompletoLivro(id, req.body);
 
@@ -36,6 +48,12 @@ function atualizarCompleto(req, res) {
 }
 
 function atualizarParcial(req, res) {
+  // 💻 Validação para alteração parcial (campos opcionais: false)
+  const erro = livroService.validarLivro(req.body, false);
+  if (erro) {
+    return res.status(400).json({ erro: erro });
+  }
+
   const { id } = req.params;
   let livro = livroService.atualizarParcialLivro(id, req.body);
 
