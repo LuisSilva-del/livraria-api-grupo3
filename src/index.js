@@ -1,4 +1,6 @@
+require("dotenv").config();
 
+const { testarConexao } = require("./config/db");
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
 const express = require("express");
@@ -29,4 +31,5 @@ app.use(tratarErros);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
+  testarConexao();
 });

@@ -1,2 +1,3 @@
 node_modules/
-.postman/resurces.yaml
+.postman/resources.yaml
+.env

@@ -1,9 +1,8 @@
 const livroService = require("../services/livroService");
 
-function listarLivros(req, res) {
-  // throw new Error("Teste de erro 500");
+async function listarLivros(req, res) {
   const filtros = req.query;
-  const livros = livroService.listarLivros(filtros);
+  const livros = await livroService.listarLivros(filtros);
 
   res.status(200).json(livros);
 }
@@ -21,18 +20,21 @@ function buscarLivroPorId(req, res) {
 
 function criar(req, res) {
   const erro = livroService.validarLivro(req.body, true);
+
   if (erro) {
     return res.status(400).json({ erro });
   }
 
   const novoLivro = livroService.criarLivro(req.body);
+
   res.status(201).json(novoLivro);
 }
 
 function atualizarCompleto(req, res) {
   const erro = livroService.validarLivro(req.body, true);
+
   if (erro) {
-    return res.status(400).json({ erro: erro });
+    return res.status(400).json({ erro });
   }
 
   const { id } = req.params;
@@ -49,8 +51,9 @@ function atualizarCompleto(req, res) {
 
 function atualizarParcial(req, res) {
   const erro = livroService.validarLivro(req.body, false);
+
   if (erro) {
-    return res.status(400).json({ erro: erro });
+    return res.status(400).json({ erro });
   }
 
   const { id } = req.params;
@@ -84,5 +87,5 @@ module.exports = {
   criar,
   atualizarCompleto,
   atualizarParcial,
-  deletar,
+  deletar
 };
