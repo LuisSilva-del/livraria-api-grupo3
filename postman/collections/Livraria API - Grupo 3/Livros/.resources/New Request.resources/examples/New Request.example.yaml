@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/livros/{{livroId}}"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    x-powered-by: Express
+    content-type: application/json; charset=utf-8
+    content-length: "99"
+    etag: W/"63-q2dL393xTpEEKhT8xQrPIJtF5Xs"
+    date: Wed, 21 Oct 2026 18:12:34 GMT
+    connection: keep-alive
+    keep-alive: timeout=5
+  body:
+    type: json
+    content: |-
+      {
+        "id": 6,
+        "titulo": "O Pequeno Príncipe",
+        "autor": "Antoine de Saint-Exupéry",
+        "preco": 35,
+        "estoque": 10
+      }
+order: 1000

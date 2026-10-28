@@ -1,0 +1,30 @@
+$kind: http-example
+name: /alterarpreco
+request:
+  url: "{{baseUrl}}/livros/{{livroId}}"
+  method: PATCH
+  body:
+    type: json
+    content: '{ "preco": 35 }'
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    x-powered-by: Express
+    content-type: application/json; charset=utf-8
+    content-length: "99"
+    etag: W/"63-q2dL393xTpEEKhT8xQrPIJtF5Xs"
+    date: Wed, 21 Oct 2026 18:06:22 GMT
+    connection: keep-alive
+    keep-alive: timeout=5
+  body:
+    type: json
+    content: |-
+      {
+        "id": 6,
+        "titulo": "O Pequeno Príncipe",
+        "autor": "Antoine de Saint-Exupéry",
+        "preco": 35,
+        "estoque": 10
+      }
+order: 1000

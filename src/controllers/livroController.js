@@ -1,6 +1,7 @@
 const livroService = require("../services/livroService");
 
 function listarLivros(req, res) {
+  // throw new Error("Teste de erro 500");
   const filtros = req.query;
   const livros = livroService.listarLivros(filtros);
 
@@ -19,19 +20,16 @@ function buscarLivroPorId(req, res) {
 }
 
 function criar(req, res) {
-  // 💻 Validação para criar (todos os campos obrigatórios: true)
   const erro = livroService.validarLivro(req.body, true);
   if (erro) {
-    return res.status(400).json({ erro: erro });
+    return res.status(400).json({ erro });
   }
 
   const novoLivro = livroService.criarLivro(req.body);
-
   res.status(201).json(novoLivro);
 }
 
 function atualizarCompleto(req, res) {
-  // 💻 Validação para substituir tudo (todos os campos obrigatórios: true)
   const erro = livroService.validarLivro(req.body, true);
   if (erro) {
     return res.status(400).json({ erro: erro });
@@ -50,7 +48,6 @@ function atualizarCompleto(req, res) {
 }
 
 function atualizarParcial(req, res) {
-  // 💻 Validação para alteração parcial (campos opcionais: false)
   const erro = livroService.validarLivro(req.body, false);
   if (erro) {
     return res.status(400).json({ erro: erro });

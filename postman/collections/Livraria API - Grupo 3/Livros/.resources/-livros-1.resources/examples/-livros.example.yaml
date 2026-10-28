@@ -1,0 +1,64 @@
+$kind: http-example
+name: /livros
+request:
+  url: "{{baseUrl}}/livros"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    x-powered-by: Express
+    content-type: application/json; charset=utf-8
+    content-length: "556"
+    etag: W/"22c-iqXdaiUfp0u0fkO1DuvvE9wzluc"
+    date: Wed, 21 Oct 2026 17:50:46 GMT
+    connection: keep-alive
+    keep-alive: timeout=5
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "id": 1,
+          "titulo": "Clean Code",
+          "autor": "Robert C. Martin",
+          "preco": 89.9,
+          "estoque": 12
+        },
+        {
+          "id": 2,
+          "titulo": "Eloquent JavaScript",
+          "autor": "Marijn Haverbeke",
+          "preco": 45,
+          "estoque": 20
+        },
+        {
+          "id": 3,
+          "titulo": "O Senhor dos Anéis",
+          "autor": "J.R.R. Tolkien",
+          "preco": 60,
+          "estoque": 5
+        },
+        {
+          "id": 4,
+          "titulo": "O Senhor dos Anéis",
+          "autor": "J.R.R. Tolkien",
+          "preco": 60,
+          "estoque": 5
+        },
+        {
+          "id": 5,
+          "titulo": "O Pequeno Príncipe",
+          "autor": "Antoine de Saint-Exupéry",
+          "preco": 39.9,
+          "estoque": 10
+        },
+        {
+          "id": 6,
+          "titulo": "O Pequeno Príncipe",
+          "autor": "Antoine de Saint-Exupéry",
+          "preco": 39.9,
+          "estoque": 10
+        }
+      ]
+order: 1000

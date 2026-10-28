@@ -1,0 +1,17 @@
+$kind: http-example
+name: /apagarlivro
+request:
+  url: "{{baseUrl}}/livros/{{livroId}}"
+  method: DELETE
+response:
+  statusCode: 204
+  statusText: No Content
+  headers:
+    x-powered-by: Express
+    date: Wed, 21 Oct 2026 18:12:39 GMT
+    connection: keep-alive
+    keep-alive: timeout=5
+  body:
+    type: text
+    content: ""
+order: 1000

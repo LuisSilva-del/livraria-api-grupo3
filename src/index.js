@@ -1,7 +1,6 @@
 
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
-const categoriaRoutes = require('./routes/categoriaRoutes');
 const express = require("express");
 const rotaNaoEncontrada = require("./middlewares/rotaNaoEncontrada");
 const tratarErros = require("./middlewares/tratarErros");
@@ -23,7 +22,7 @@ app.get('/sobre', (req, res) => {
 });
 
 app.use(routes);
-app.use('/categorias', categoriaRoutes);
+// app.use('/categorias', categoriaRoutes);
 
 app.use(rotaNaoEncontrada);
 app.use(tratarErros);
