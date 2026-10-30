@@ -7,8 +7,9 @@ function listarTodos() {
   return livros;
 }
 
-function buscarPorId(id) {
-  return livros.find((livro) => livro.id === Number(id));
+async function buscarLivroPorId(id) {
+  const [linhas] = await db.query("SELECT * FROM livros WHERE id = ?", [id]);
+  return linhas[0];
 }
 
 async function listarLivros(filtros) {
@@ -46,7 +47,7 @@ function criarLivro(dados) {
 }
 
 function atualizarCompletoLivro(id, dados) {
-  const livro = buscarPorId(id);
+  const livro = livros.find((livro) => livro.id === Number(id));
 
   if (!livro) {
     return null;
@@ -61,7 +62,7 @@ function atualizarCompletoLivro(id, dados) {
 }
 
 function atualizarParcialLivro(id, dados) {
-  const livro = buscarPorId(id);
+  const livro = livros.find((livro) => livro.id === Number(id));
 
   if (!livro) {
     return null;
@@ -128,7 +129,7 @@ function validarLivro(dados, completo) {
 
 module.exports = {
   listarTodos,
-  buscarPorId,
+  buscarLivroPorId,
   listarLivros,
   criarLivro,
   atualizarCompletoLivro,

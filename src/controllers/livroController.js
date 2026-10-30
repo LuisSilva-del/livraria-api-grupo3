@@ -7,9 +7,9 @@ async function listarLivros(req, res) {
   res.status(200).json(livros);
 }
 
-function buscarLivroPorId(req, res) {
-  const { id } = req.params;
-  const livro = livroService.buscarPorId(id);
+async function buscarPorId(req, res) {
+  const id = req.params.id;
+  const livro = await livroService.buscarLivroPorId(id);
 
   if (!livro) {
     return res.status(404).json({ erro: "Livro nao encontrado" });
@@ -83,9 +83,9 @@ function deletar(req, res) {
 
 module.exports = {
   listarLivros,
-  buscarLivroPorId,
+  buscarPorId,
   criar,
   atualizarCompleto,
   atualizarParcial,
-  deletar
+  deletar,
 };
