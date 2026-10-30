@@ -1,14 +1,11 @@
-const Livro = require("../models/Livro");
 const { db } = require("../config/db");
-const livros = [];
-let proximoId = 1;
-
-function listarTodos() {
-  return livros;
-}
 
 async function buscarLivroPorId(id) {
-  const [linhas] = await db.query("SELECT * FROM livros WHERE id = ?", [id]);
+  const [linhas] = await db.query(
+    "SELECT * FROM livros WHERE id = ?",
+    [id]
+  );
+
   return linhas[0];
 }
 
@@ -18,89 +15,63 @@ async function listarLivros(filtros) {
 
   if (filtros.autor) {
     resultado = resultado.filter((livro) =>
-      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase()),
+      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase())
     );
   }
 
   if (filtros.precoMax) {
     resultado = resultado.filter(
-      (livro) => livro.preco <= Number(filtros.precoMax),
+      (livro) => livro.preco <= Number(filtros.precoMax)
     );
   }
 
   return resultado;
 }
 
-function criarLivro(dados) {
-  const novoLivro = new Livro(
-    dados.titulo,
-    dados.autor,
-    dados.preco,
-    dados.estoque,
+async function criarLivro(dados) {
+  const [resultado] = await db.query(
+    "INSERT INTO livros (titulo, autor, preco, estoque) VALUES (?, ?, ?, ?)",
+    [dados.titulo, dados.autor, dados.preco, dados.estoque]
   );
-  novoLivro.id = proximoId;
-  proximoId++;
 
-  livros.push(novoLivro);
-
-  return novoLivro;
+  return await buscarLivroPorId(resultado.insertId);
 }
 
-function atualizarCompletoLivro(id, dados) {
-  const livro = livros.find((livro) => livro.id === Number(id));
+// 4.1 - PUT: atualizar um livro no banco
+async function atualizarLivro(id, dados) {
+  const [resultado] = await db.query(
+    "UPDATE livros SET titulo = ?, autor = ?, preco = ?, estoque = ? WHERE id = ?",
+    [dados.titulo, dados.autor, dados.preco, dados.estoque, id]
+  );
 
-  if (!livro) {
-    return null;
-  }
+  if (resultado.affectedRows === 0) return null;
 
-  livro.titulo = dados.titulo;
-  livro.autor = dados.autor;
-  livro.preco = dados.preco;
-  livro.estoque = dados.estoque;
-
-  return livro;
+  return await buscarLivroPorId(id);
 }
 
-function atualizarParcialLivro(id, dados) {
-  const livro = livros.find((livro) => livro.id === Number(id));
+// 4.2 - PATCH: atualizar parcialmente um livro
+async function atualizarParcialLivro(id, dados) {
+  const livro = await buscarLivroPorId(id);
 
-  if (!livro) {
-    return null;
-  }
+  if (!livro) return null;
 
   if (dados.titulo !== undefined) livro.titulo = dados.titulo;
   if (dados.autor !== undefined) livro.autor = dados.autor;
   if (dados.preco !== undefined) livro.preco = dados.preco;
   if (dados.estoque !== undefined) livro.estoque = dados.estoque;
 
-  return livro;
+  return await atualizarLivro(id, livro);
 }
 
-function deletarLivro(id) {
-  const posicao = livros.findIndex((livro) => livro.id === Number(id));
+// 5.1 - DELETE: apagar um livro do banco
+async function deletarLivro(id) {
+  const [resultado] = await db.query(
+    "DELETE FROM livros WHERE id = ?",
+    [id]
+  );
 
-  if (posicao === -1) {
-    return false;
-  }
-
-  livros.splice(posicao, 1);
-
-  return true;
+  return resultado.affectedRows > 0;
 }
-
-criarLivro({
-  titulo: "Clean Code",
-  autor: "Robert C. Martin",
-  preco: 89.9,
-  estoque: 12,
-});
-
-criarLivro({
-  titulo: "Eloquent JavaScript",
-  autor: "Marijn Haverbeke",
-  preco: 45.0,
-  estoque: 20,
-});
 
 function validarLivro(dados, completo) {
   if (!dados) return "Envie os dados do livro em JSON";
@@ -128,12 +99,12 @@ function validarLivro(dados, completo) {
 }
 
 module.exports = {
-  listarTodos,
   buscarLivroPorId,
   listarLivros,
   criarLivro,
-  atualizarCompletoLivro,
+  atualizarLivro,
   atualizarParcialLivro,
   deletarLivro,
   validarLivro,
 };
+
