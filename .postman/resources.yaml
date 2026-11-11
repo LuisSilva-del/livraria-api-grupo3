@@ -1,7 +1,0 @@
-workspace:
-  id: d817f666-318a-4344-8280-4d2374b6d53c
-cloudResources:
-  collections:
-    ../postman/collections/Livraria API - Entrega do Bloco 3: 59118836-c38b4f98-c4bc-4e52-8025-a3f5d66da174
-  globals:
-    ../postman/globals/workspace.globals.yaml: de990754-702e-4717-8b5d-6d78edc116d0
