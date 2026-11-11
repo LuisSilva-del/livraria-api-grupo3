@@ -108,7 +108,12 @@ Conectado ao MySQL!
 
 Se aparecer `ERRO ao conectar no MySQL`, veja [Problemas comuns](#problemas-comuns). Você também pode abrir `http://localhost:3000` no navegador: a resposta esperada é o texto `API da Livraria no ar!`.
 
-O único script do `package.json` é o `dev` (que usa o nodemon). Para rodar sem o nodemon, use `node src/index.js`.
+O `package.json` tem dois scripts:
+
+| Comando | O que faz |
+| :--- | :--- |
+| `npm run dev` | Inicia a API com o nodemon, que reinicia o servidor ao salvar um arquivo (use no desenvolvimento) |
+| `npm start` | Inicia a API com o Node, sem reiniciar sozinha |
 
 ## Variáveis de ambiente
 
@@ -222,7 +227,7 @@ Requisição → express.json → logger → routes → (validarId) → controll
 - `express.json()` converte o corpo JSON da requisição em objeto (`req.body`).
 - `logger` imprime no terminal a data, o método e a URL de cada requisição.
 - `routes` escolhe o controller de acordo com a URL.
-- `validarId` (nas rotas de livros com `:id`) recusa IDs que não sejam números.
+- `validarId` (nas rotas com `:id`, de livros e de categorias) recusa IDs que não sejam números inteiros.
 - O `controller` valida os dados e escolhe o status HTTP; o `service` conversa com o MySQL (livros) ou com a lista em memória (categorias).
 - Se nenhuma rota atender à URL, `rotaNaoEncontrada` responde 404. Erros inesperados passam por `tratarErros`.
 
@@ -254,19 +259,22 @@ As rotas seguem o padrão REST: os recursos têm nomes no plural e o método HTT
 
 | Parâmetro | Como funciona | Exemplo |
 | :--- | :--- | :--- |
+| `titulo` | Livros cujo título contém o texto, sem diferenciar maiúsculas de minúsculas | `/livros?titulo=clean` |
 | `autor` | Livros cujo autor contém o texto, sem diferenciar maiúsculas de minúsculas | `/livros?autor=martin` |
 | `precoMax` | Livros com preço menor ou igual ao valor | `/livros?precoMax=50` |
 
-Os dois podem ser combinados: `/livros?autor=tolkien&precoMax=40`.
+Os filtros podem ser combinados: `/livros?autor=tolkien&precoMax=40`.
 
 **Campos do livro**
 
 | Campo | Tipo | Regra |
 | :--- | :--- | :--- |
-| `titulo` | texto | Obrigatório no POST e no PUT (máximo de 150 caracteres) |
-| `autor` | texto | Obrigatório no POST e no PUT (máximo de 100 caracteres) |
+| `titulo` | texto | Obrigatório no POST e no PUT; não pode ser vazio (máximo de 150 caracteres) |
+| `autor` | texto | Obrigatório no POST e no PUT; não pode ser vazio (máximo de 100 caracteres) |
 | `preco` | número | Obrigatório no POST e no PUT; maior ou igual a 0 |
-| `estoque` | número | Obrigatório no POST e no PUT; maior ou igual a 0 |
+| `estoque` | número inteiro | Obrigatório no POST e no PUT; maior ou igual a 0 |
+
+No PATCH todos os campos são opcionais, mas os que forem enviados seguem as mesmas regras.
 
 O `id` é gerado pelo banco e não deve ser enviado.
 
@@ -310,13 +318,13 @@ Resposta (`201 Created`):
 | Método | Rota | Descrição | Status |
 | :--- | :--- | :--- | :---: |
 | GET | `/categorias` | Lista as categorias | 200 |
-| GET | `/categorias/:id` | Busca uma categoria pelo ID | 200 ou 404 |
+| GET | `/categorias/:id` | Busca uma categoria pelo ID | 200, 400 ou 404 |
 | POST | `/categorias` | Cadastra uma categoria | 201 ou 400 |
-| PUT | `/categorias/:id` | Atualiza todos os dados da categoria | 200 ou 400 (veja a observação abaixo) |
-| PATCH | `/categorias/:id` | Atualiza parte dos dados da categoria | 200 ou 400 (veja a observação abaixo) |
-| DELETE | `/categorias/:id` | Exclui uma categoria | 204 ou 404 |
+| PUT | `/categorias/:id` | Atualiza todos os dados da categoria | 200, 400 ou 404 |
+| PATCH | `/categorias/:id` | Atualiza parte dos dados da categoria | 200, 400 ou 404 |
+| DELETE | `/categorias/:id` | Exclui uma categoria | 204, 400 ou 404 |
 
-> **Observação:** hoje o PUT e o PATCH de categorias validam os dados e respondem 200, mas ainda não alteram a categoria nem retornam 404 para um ID inexistente. Veja [Limitações conhecidas](#limitações-conhecidas).
+O PUT e o PATCH respondem com a categoria já atualizada.
 
 **Campos da categoria**
 
@@ -360,10 +368,12 @@ Todas as respostas de erro têm o mesmo formato:
 | :---: | :--- | :--- |
 | 400 | Corpo ausente ou sem o cabeçalho `Content-Type: application/json` | `Envie os dados do livro em JSON` / `Envie os dados da categoria em JSON` |
 | 400 | JSON com erro de escrita | `O JSON enviado esta mal escrito` |
-| 400 | ID da URL não é número (rotas de livros) | `O id deve ser um numero` |
+| 400 | ID da URL não é um número inteiro positivo (livros e categorias) | `O id deve ser um numero inteiro` |
 | 400 | Campo obrigatório do livro ausente | `O titulo e obrigatorio`, `O autor e obrigatorio`, `O preco e obrigatorio` ou `O estoque e obrigatorio` |
+| 400 | Título ou autor que não é texto ou está vazio | `O titulo deve ser um texto nao vazio` / `O autor deve ser um texto nao vazio` |
 | 400 | Preço negativo ou que não é número | `O preco deve ser um numero maior ou igual a zero` |
 | 400 | Estoque negativo ou que não é número | `O estoque deve ser um numero maior ou igual a zero` |
+| 400 | Estoque que não é inteiro (por exemplo, `1.5`) | `O estoque deve ser um numero inteiro` |
 | 400 | Categoria sem nome | `O nome e obrigatorio` |
 | 400 | Nome da categoria com menos de 3 letras | `O nome deve ter pelo menos 3 letras` |
 | 400 | Texto ou número grande demais para a coluna do banco | `Algum valor e grande demais para o banco` |
@@ -433,10 +443,8 @@ node testar.js
 ## Limitações conhecidas
 
 - As **categorias** são guardadas em memória: os dados criados são perdidos quando o servidor reinicia. Apenas os livros usam o MySQL.
-- O **PUT e o PATCH de `/categorias/:id`** ainda não alteram a categoria e não retornam 404 para ID inexistente. As funções de atualização existem em `categoriaService.js`, mas o controller ainda não as chama.
-- O `GET /livros` filtra apenas por `autor` e `precoMax`. A requisição "4 - Filtrar por titulo" do Postman envia `?titulo=`, que ainda não é tratado (a API devolve todos os livros).
-- As rotas de categorias não usam o `validarId`: um ID que não é número resulta em 404, e não em 400.
 - Livros e categorias ainda não estão relacionados no banco, embora o diagrama de classes preveja essa ligação.
+- Os filtros do `GET /livros` são aplicados no JavaScript depois de buscar todos os livros do banco. Com muitos registros, o ideal é filtrar direto no SQL com `WHERE` e `?`.
 
 ## Cronograma do projeto
 

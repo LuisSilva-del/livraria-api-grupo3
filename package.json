@@ -1,14 +1,15 @@
 {
-  "name": "05-padra-mvc",
+  "name": "livraria-api-grupo3",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "API REST de gestao de livraria (livros e categorias) com Node.js, Express e MySQL",
   "dependencies": {
     "dotenv": "^18.0.9",
     "express": "^5.2.1",

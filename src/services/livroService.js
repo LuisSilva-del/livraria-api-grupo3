@@ -19,6 +19,12 @@ async function listarLivros(filtros) {
     );
   }
 
+  if (filtros.titulo) {
+    resultado = resultado.filter((livro) =>
+      livro.titulo.toLowerCase().includes(filtros.titulo.toLowerCase())
+    );
+  }
+
   if (filtros.precoMax) {
     resultado = resultado.filter(
       (livro) => livro.preco <= Number(filtros.precoMax)
@@ -37,7 +43,6 @@ async function criarLivro(dados) {
   return await buscarLivroPorId(resultado.insertId);
 }
 
-// 4.1 - PUT: atualizar um livro no banco
 async function atualizarLivro(id, dados) {
   const [resultado] = await db.query(
     "UPDATE livros SET titulo = ?, autor = ?, preco = ?, estoque = ? WHERE id = ?",
@@ -49,7 +54,6 @@ async function atualizarLivro(id, dados) {
   return await buscarLivroPorId(id);
 }
 
-// 4.2 - PATCH: atualizar parcialmente um livro
 async function atualizarParcialLivro(id, dados) {
   const livro = await buscarLivroPorId(id);
 
@@ -63,7 +67,6 @@ async function atualizarParcialLivro(id, dados) {
   return await atualizarLivro(id, livro);
 }
 
-// 5.1 - DELETE: apagar um livro do banco
 async function deletarLivro(id) {
   const [resultado] = await db.query(
     "DELETE FROM livros WHERE id = ?",
@@ -82,6 +85,20 @@ function validarLivro(dados, completo) {
   if (completo && dados.estoque === undefined) return "O estoque e obrigatorio";
 
   if (
+    dados.titulo !== undefined &&
+    (typeof dados.titulo !== "string" || dados.titulo.trim() === "")
+  ) {
+    return "O titulo deve ser um texto nao vazio";
+  }
+
+  if (
+    dados.autor !== undefined &&
+    (typeof dados.autor !== "string" || dados.autor.trim() === "")
+  ) {
+    return "O autor deve ser um texto nao vazio";
+  }
+
+  if (
     dados.preco !== undefined &&
     (typeof dados.preco !== "number" || dados.preco < 0)
   ) {
@@ -93,6 +110,10 @@ function validarLivro(dados, completo) {
     (typeof dados.estoque !== "number" || dados.estoque < 0)
   ) {
     return "O estoque deve ser um numero maior ou igual a zero";
+  }
+
+  if (dados.estoque !== undefined && !Number.isInteger(dados.estoque)) {
+    return "O estoque deve ser um numero inteiro";
   }
 
   return null;

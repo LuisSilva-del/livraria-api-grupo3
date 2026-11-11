@@ -1,3 +1,5 @@
+const PRECO_MINIMO = 0;
+
 class Livro {
   #id;
   #preco;
@@ -17,6 +19,10 @@ class Livro {
 
   set id(novoId) {
     this.#id = novoId;
+  }
+
+  get preco() {
+    return this.#preco;
   }
 
   set preco(novoPreco) {

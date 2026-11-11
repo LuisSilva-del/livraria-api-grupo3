@@ -23,7 +23,15 @@ function atualizar(req, res) {
     return;
   }
 
-  res.status(200).json({ mensagem: "Categoria atualizada com sucesso" });
+  const categoria = categoriaService.atualizarCategoria(
+    req.params.id,
+    req.body,
+  );
+  if (!categoria) {
+    res.status(404).json({ erro: "Categoria nao encontrada" });
+    return;
+  }
+  res.status(200).json(categoria);
 }
 
 function atualizarParcial(req, res) {
@@ -32,7 +40,15 @@ function atualizarParcial(req, res) {
     res.status(400).json({ erro: erro });
     return;
   }
-  res.status(200).json({ mensagem: "Categoria alterada parcialmente" });
+  const categoria = categoriaService.atualizarParcialCategoria(
+    req.params.id,
+    req.body,
+  );
+  if (!categoria) {
+    res.status(404).json({ erro: "Categoria nao encontrada" });
+    return;
+  }
+  res.status(200).json(categoria);
 }
 
 function buscarPorId(req, res) {
