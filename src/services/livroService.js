@@ -1,11 +1,7 @@
 const { db } = require("../config/db");
 
 async function buscarLivroPorId(id) {
-  const [linhas] = await db.query(
-    "SELECT * FROM livros WHERE id = ?",
-    [id]
-  );
-
+  const [linhas] = await db.query("SELECT * FROM livros WHERE id = ?", [id]);
   return linhas[0];
 }
 
@@ -15,19 +11,19 @@ async function listarLivros(filtros) {
 
   if (filtros.autor) {
     resultado = resultado.filter((livro) =>
-      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase())
+      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase()),
     );
   }
 
   if (filtros.titulo) {
     resultado = resultado.filter((livro) =>
-      livro.titulo.toLowerCase().includes(filtros.titulo.toLowerCase())
+      livro.titulo.toLowerCase().includes(filtros.titulo.toLowerCase()),
     );
   }
 
   if (filtros.precoMax) {
     resultado = resultado.filter(
-      (livro) => livro.preco <= Number(filtros.precoMax)
+      (livro) => livro.preco <= Number(filtros.precoMax),
     );
   }
 
@@ -37,7 +33,7 @@ async function listarLivros(filtros) {
 async function criarLivro(dados) {
   const [resultado] = await db.query(
     "INSERT INTO livros (titulo, autor, preco, estoque) VALUES (?, ?, ?, ?)",
-    [dados.titulo, dados.autor, dados.preco, dados.estoque]
+    [dados.titulo, dados.autor, dados.preco, dados.estoque],
   );
 
   return await buscarLivroPorId(resultado.insertId);
@@ -46,7 +42,7 @@ async function criarLivro(dados) {
 async function atualizarLivro(id, dados) {
   const [resultado] = await db.query(
     "UPDATE livros SET titulo = ?, autor = ?, preco = ?, estoque = ? WHERE id = ?",
-    [dados.titulo, dados.autor, dados.preco, dados.estoque, id]
+    [dados.titulo, dados.autor, dados.preco, dados.estoque, id],
   );
 
   if (resultado.affectedRows === 0) return null;
@@ -68,10 +64,7 @@ async function atualizarParcialLivro(id, dados) {
 }
 
 async function deletarLivro(id) {
-  const [resultado] = await db.query(
-    "DELETE FROM livros WHERE id = ?",
-    [id]
-  );
+  const [resultado] = await db.query("DELETE FROM livros WHERE id = ?", [id]);
 
   return resultado.affectedRows > 0;
 }
@@ -128,4 +121,3 @@ module.exports = {
   deletarLivro,
   validarLivro,
 };
-
