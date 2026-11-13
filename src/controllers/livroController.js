@@ -1,9 +1,12 @@
 const livroService = require("../services/livroService");
 
-function listarLivros(req, res) {
+// Adicionado o 'async' aqui na frente da função
+async function listarLivros(req, res) {
   // throw new Error("Teste de erro 500");
   const filtros = req.query;
-  const livros = livroService.listarLivros(filtros);
+  
+  // Adicionado o 'await' aqui para esperar o banco responder
+  const livros = await livroService.listarLivros(filtros);
 
   res.status(200).json(livros);
 }
@@ -86,3 +89,8 @@ module.exports = {
   atualizarParcial,
   deletar,
 };
+
+
+
+
+

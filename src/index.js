@@ -1,9 +1,11 @@
+require("dotenv").config();
 
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
 const express = require("express");
 const rotaNaoEncontrada = require("./middlewares/rotaNaoEncontrada");
 const tratarErros = require("./middlewares/tratarErros");
+const { testarConexao } = require("./config/db");
 
 const app = express();
 const DEFAULT_PORT = 3000;
@@ -29,4 +31,5 @@ app.use(tratarErros);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
+  testarConexao();
 });

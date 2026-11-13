@@ -1,4 +1,5 @@
 const Livro = require("../models/Livro");
+const { db } = require("../config/db"); // <-- Importando o banco de dados ("o freezer")
 
 const livros = [];
 let proximoId = 1;
@@ -11,8 +12,13 @@ function buscarPorId(id) {
   return livros.find((livro) => livro.id === Number(id));
 }
 
-function listarLivros(filtros) {
-  let resultado = livros;
+// Adicionado o 'async' na frente da função
+async function listarLivros(filtros) {
+  // Buscando os dados direto da tabela livros do MySQL
+  const [linhas] = await db.query("SELECT * FROM livros");
+  
+  // Substituindo o array antigo pelas linhas vindas do banco de dados
+  let resultado = linhas;
 
   if (filtros.autor) {
     resultado = resultado.filter((livro) =>
@@ -135,3 +141,5 @@ module.exports = {
   deletarLivro,
   validarLivro,
 };
+
+
