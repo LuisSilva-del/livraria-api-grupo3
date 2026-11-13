@@ -40,22 +40,5 @@ INSERT INTO livros (titulo, autor, preco, estoque, categoria_id) VALUES
 
 SELECT * FROM livros;
 
-SELECT livros.titulo, categorias.nome
-FROM livros
-JOIN categorias ON livros.categoria_id = categorias.id;
 
-INSERT INTO livros (titulo, autor, preco, estoque, categoria_id)
-VALUES ('Livro Sem Lar', 'Ninguem', 10, 1, 99);
-
-DELETE FROM categorias WHERE id = 1;
-
-DROP DATABASE IF EXISTS livraria;
-
-SELECT id, titulo, categoria_id
-FROM livros
-ORDER BY id;
-
-SELECT id, nome
-FROM categorias
-ORDER BY id;
 
