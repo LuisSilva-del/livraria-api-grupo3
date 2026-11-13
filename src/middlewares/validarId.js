@@ -1,9 +1,9 @@
 function validarId(req, res, next) {
-  if (isNaN(Number(req.params.id))) {
-    res.status(400).json({ erro: "O id deve ser um numero" });
+  if (!/^\d+$/.test(req.params.id)) {
+    res.status(400).json({ erro: "O id deve ser um numero inteiro" });
     return;
   }
-  next(); // Passa para a próxima função (o controller) se for um número válido
+  next();
 }
 
 module.exports = validarId;

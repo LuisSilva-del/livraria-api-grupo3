@@ -1,9 +1,7 @@
-// Crie os caminhos apontando corretamente para dentro de src/models/
 const Cliente = require("./src/models/Cliente");
 const Funcionario = require("./src/models/Funcionario");
 const Livro = require("./src/models/Livro"); 
 
-// --- O restante do seu código testar.js continua exatamente igual ---
 const c1 = new Cliente("Rebeca Souza", "rebeca@email.com", 150);
 const f1 = new Funcionario("Victor Gonçalves", "victor@livraria.com", 2500);
 

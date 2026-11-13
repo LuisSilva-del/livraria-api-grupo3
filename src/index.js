@@ -24,7 +24,6 @@ app.get('/sobre', (req, res) => {
 });
 
 app.use(routes);
-// app.use('/categorias', categoriaRoutes);
 
 app.use(rotaNaoEncontrada);
 app.use(tratarErros);

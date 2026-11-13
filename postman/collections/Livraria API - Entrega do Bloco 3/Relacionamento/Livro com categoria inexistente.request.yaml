@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/livros"
+method: POST
+body:
+  type: json
+  content: '{"titulo":"Novo Livro","categoria_id":99999,"autor":"Autor Teste","preco":50,"estoque":10}'
+order: 2000
+scripts:
+  - type: afterResponse
+    code: |
+      pm.test("Status code is 400", function () {
+          pm.response.to.have.status(400);
+      });
+    language: text/javascript

@@ -3,10 +3,9 @@ const { db } = require("../config/db");
 
 async function buscarLivroPorId(id) {
   const [linhas] = await db.query(
-    "SELECT * FROM livros WHERE id = ?",
-    [id]
+    "SELECT livros.*, categorias.nome AS categoria FROM livros LEFT JOIN categorias ON livros.categoria_id = categorias.id WHERE livros.id = ?",
+    [id],
   );
-
   return linhas[0];
 }
 
@@ -17,13 +16,19 @@ async function listarLivros(filtros) {
 
   if (filtros.autor) {
     resultado = resultado.filter((livro) =>
-      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase())
+      livro.autor.toLowerCase().includes(filtros.autor.toLowerCase()),
+    );
+  }
+
+  if (filtros.titulo) {
+    resultado = resultado.filter((livro) =>
+      livro.titulo.toLowerCase().includes(filtros.titulo.toLowerCase()),
     );
   }
 
   if (filtros.precoMax) {
     resultado = resultado.filter(
-      (livro) => livro.preco <= Number(filtros.precoMax)
+      (livro) => livro.preco <= Number(filtros.precoMax),
     );
   }
 
@@ -32,18 +37,17 @@ async function listarLivros(filtros) {
 
 async function criarLivro(dados) {
   const [resultado] = await db.query(
-    "INSERT INTO livros (titulo, autor, preco, estoque) VALUES (?, ?, ?, ?)",
-    [dados.titulo, dados.autor, dados.preco, dados.estoque]
+    "INSERT INTO livros (titulo, autor, preco, estoque, categoria_id) VALUES (?, ?, ?, ?, ?)",
+    [dados.titulo, dados.autor, dados.preco, dados.estoque, dados.categoria_id],
   );
 
   return await buscarLivroPorId(resultado.insertId);
 }
 
-// 4.1 - PUT: atualizar um livro no banco
 async function atualizarLivro(id, dados) {
   const [resultado] = await db.query(
-    "UPDATE livros SET titulo = ?, autor = ?, preco = ?, estoque = ? WHERE id = ?",
-    [dados.titulo, dados.autor, dados.preco, dados.estoque, id]
+    "UPDATE livros SET titulo = ?, autor = ?, preco = ?, estoque = ?, categoria_id = ? WHERE id = ?",
+    [dados.titulo, dados.autor, dados.preco, dados.estoque, dados.categoria_id, id],
   );
 
   if (resultado.affectedRows === 0) return null;
@@ -51,7 +55,6 @@ async function atualizarLivro(id, dados) {
   return await buscarLivroPorId(id);
 }
 
-// 4.2 - PATCH: atualizar parcialmente um livro
 async function atualizarParcialLivro(id, dados) {
   const livro = await buscarLivroPorId(id);
 
@@ -61,16 +64,13 @@ async function atualizarParcialLivro(id, dados) {
   if (dados.autor !== undefined) livro.autor = dados.autor;
   if (dados.preco !== undefined) livro.preco = dados.preco;
   if (dados.estoque !== undefined) livro.estoque = dados.estoque;
+  if (dados.categoria_id !== undefined) livro.categoria_id = dados.categoria_id;
 
   return await atualizarLivro(id, livro);
 }
 
-// 5.1 - DELETE: apagar um livro do banco
 async function deletarLivro(id) {
-  const [resultado] = await db.query(
-    "DELETE FROM livros WHERE id = ?",
-    [id]
-  );
+  const [resultado] = await db.query("DELETE FROM livros WHERE id = ?", [id]);
 
   return resultado.affectedRows > 0;
 }
@@ -84,6 +84,20 @@ function validarLivro(dados, completo) {
   if (completo && dados.estoque === undefined) return "O estoque e obrigatorio";
 
   if (
+    dados.titulo !== undefined &&
+    (typeof dados.titulo !== "string" || dados.titulo.trim() === "")
+  ) {
+    return "O titulo deve ser um texto nao vazio";
+  }
+
+  if (
+    dados.autor !== undefined &&
+    (typeof dados.autor !== "string" || dados.autor.trim() === "")
+  ) {
+    return "O autor deve ser um texto nao vazio";
+  }
+
+  if (
     dados.preco !== undefined &&
     (typeof dados.preco !== "number" || dados.preco < 0)
   ) {
@@ -95,6 +109,14 @@ function validarLivro(dados, completo) {
     (typeof dados.estoque !== "number" || dados.estoque < 0)
   ) {
     return "O estoque deve ser um numero maior ou igual a zero";
+  }
+
+  if (dados.estoque !== undefined && !Number.isInteger(dados.estoque)) {
+    return "O estoque deve ser um numero inteiro";
+  }
+
+  if (dados.categoria_id !== undefined && typeof dados.categoria_id !== "number") {
+    return "O categoria_id deve ser um numero";
   }
 
   return null;

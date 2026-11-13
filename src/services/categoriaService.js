@@ -1,88 +1,70 @@
-const Categoria = require("../models/Categoria");
+// SERVICE: executa a lógica de Categoria.
 
-const categorias = [];
-let proximoId = 1;
+const { db } = require("../config/db");
 
-function validarCategoria(dados, completo) {
+async function listarCategorias(filtros = {}) {
+  const [linhas] = await db.query("SELECT * FROM categorias");
+  let resultado = linhas;
+
+  if (filtros.nome) {
+    resultado = resultado.filter((categoria) =>
+      categoria.nome.toLowerCase().includes(filtros.nome.toLowerCase()),
+    );
+  }
+
+  return resultado;
+}
+
+async function buscarCategoriaPorId(id) {
+  const [linhas] = await db.query("SELECT * FROM categorias WHERE id = ?", [id]);
+  return linhas[0];
+}
+
+ function validarCategoria(dados, completo) {
   if (!dados) return "Envie os dados da categoria em JSON";
 
   if (completo && !dados.nome) return "O nome e obrigatorio";
 
-  if (
-    dados.nome !== undefined &&
-    (typeof dados.nome !== "string" || dados.nome.length < 3)
-  ) {
+  if (dados.nome !== undefined && (typeof dados.nome !== "string" || dados.nome.length < 3)) {
     return "O nome deve ter pelo menos 3 letras";
   }
 
   return null;
 }
 
-function listarCategorias() {
-  return categorias;
+async function criarCategoria(dados) {
+  const [resultado] = await db.query(
+    "INSERT INTO categorias (nome, descricao) VALUES (?, ?)",
+    [dados.nome, dados.descricao],
+  );
+  return await buscarCategoriaPorId(resultado.insertId);
 }
 
-function listarTodas() {
-  return categorias;
+async function atualizarCategoria(id, dados) {
+  const [resultado] = await db.query(
+    "UPDATE categorias SET nome = ?, descricao = ? WHERE id = ?",
+    [dados.nome, dados.descricao, id],
+  );
+  if (resultado.affectedRows === 0) return null;
+  return await buscarCategoriaPorId(id);
 }
 
-function buscarCategoriaPorId(id) {
-  return categorias.find((categoria) => categoria.id === Number(id));
-}
-
-function criarCategoria(dados) {
-  const novaCategoria = new Categoria(dados.nome, dados.descricao);
-
-  novaCategoria.id = proximoId;
-  proximoId++;
-
-  categorias.push(novaCategoria);
-
-  return novaCategoria;
-}
-
-function atualizarCategoria(id, dados) {
-  const categoria = buscarCategoriaPorId(id);
-
-  if (!categoria) return null;
-
-  categoria.nome = dados.nome;
-  categoria.descricao = dados.descricao;
-
-  return categoria;
-}
-
-function atualizarParcialCategoria(id, dados) {
-  const categoria = buscarCategoriaPorId(id);
-
+async function atualizarParcialCategoria(id, dados) {
+  const categoria = await buscarCategoriaPorId(id);
   if (!categoria) return null;
 
   if (dados.nome !== undefined) categoria.nome = dados.nome;
   if (dados.descricao !== undefined) categoria.descricao = dados.descricao;
-
-  return categoria;
+  return await atualizarCategoria(id, categoria);
 }
 
-function deletarCategoria(id) {
-  const posicao = categorias.findIndex(
-    (categoria) => categoria.id === Number(id),
-  );
-
-  if (posicao === -1) return false;
-
-  categorias.splice(posicao, 1);
-
-  return true;
+async function deletarCategoria(id) {
+  const [resultado] = await db.query("DELETE FROM categorias WHERE id = ?", [id]);
+  return resultado.affectedRows > 0;
 }
-
-criarCategoria({
-  nome: "Infantil",
-  descricao: "Livros para criancas",
-});
 
 module.exports = {
   validarCategoria,
-  listarTodas,
   listarCategorias,
   buscarCategoriaPorId,
   criarCategoria,
