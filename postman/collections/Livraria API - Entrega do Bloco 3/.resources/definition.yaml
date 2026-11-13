@@ -4,3 +4,4 @@ variables:
   baseUrl: http://localhost:3000
   livroId: ""
   categoriaId: ""
+  livroRelacionamentoId: ""

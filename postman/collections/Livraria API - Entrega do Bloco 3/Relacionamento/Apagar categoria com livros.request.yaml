@@ -2,3 +2,10 @@ $kind: http-request
 url: "{{baseUrl}}/categorias/1"
 method: DELETE
 order: 3000
+scripts:
+  - type: afterResponse
+    code: |
+      pm.test("Status code is 409", function () {
+          pm.response.to.have.status(409);
+      });
+    language: text/javascript

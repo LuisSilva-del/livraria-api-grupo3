@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/livros"
+method: POST
+body:
+  type: json
+  content: '{"titulo":"Livro Teste Relacionamento","autor":"Teste Bloco 4","preco":25.90,"estoque":5,"categoria_id":2}'
+scripts:
+  - type: afterResponse
+    code: |
+      pm.test("Status code is 201", function () {
+          pm.response.to.have.status(201);
+      });
+
+      const livro = pm.response.json();
+
+      pm.collectionVariables.set("livroRelacionamentoId", livro.id);
+
+      pm.test("Livro foi salvo com categoria Tecnologia", function () {
+          pm.expect(livro.categoria).to.eql("Tecnologia");
+          pm.expect(livro.categoria_id).to.eql(2);
+      });
+    language: text/javascript
+order: 1500
