@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/livros"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "categoria_id": 99999
+    }
+order: 2000
