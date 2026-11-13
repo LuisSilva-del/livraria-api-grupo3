@@ -1,3 +1,7 @@
+// CONEXAO COM O BANCO (o "freezer"): onde os dados ficam guardados de verdade,
+// mesmo com o servidor desligado.
+// Os dados de acesso vem do arquivo .env, que NAO vai para o GitHub.
+
 const mysql = require("mysql2/promise");
 
 const db = mysql.createPool({

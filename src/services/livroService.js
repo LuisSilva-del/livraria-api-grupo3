@@ -1,3 +1,4 @@
+const Livro = require("../models/Livro");
 const { db } = require("../config/db");
 
 async function buscarLivroPorId(id) {
@@ -9,9 +10,8 @@ async function buscarLivroPorId(id) {
 }
 
 async function listarLivros(filtros) {
-  const [linhas] = await db.query(
-    "SELECT livros.*, categorias.nome AS categoria FROM livros LEFT JOIN categorias ON livros.categoria_id = categorias.id",
-  );
+  const [linhas] = await db.query("SELECT * FROM livros");
+
   let resultado = linhas;
 
   if (filtros.autor) {

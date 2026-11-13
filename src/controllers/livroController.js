@@ -2,6 +2,7 @@ const livroService = require("../services/livroService");
 
 async function listarLivros(req, res) {
   const filtros = req.query;
+
   const livros = await livroService.listarLivros(filtros);
 
   res.status(200).json(livros);
@@ -66,7 +67,7 @@ async function atualizarParcial(req, res) {
 
 async function deletar(req, res) {
   const { id } = req.params;
-  const apagou =  await livroService.deletarLivro(id);
+  const apagou = await livroService.deletarLivro(id);
 
   if (!apagou) {
     return res.status(404).json({ erro: "Livro nao encontrado" });
