@@ -6,7 +6,6 @@ const logger = require('./middlewares/logger');
 const express = require("express");
 const rotaNaoEncontrada = require("./middlewares/rotaNaoEncontrada");
 const tratarErros = require("./middlewares/tratarErros");
-const { testarConexao } = require("./config/db");
 
 const app = express();
 const DEFAULT_PORT = 3000;

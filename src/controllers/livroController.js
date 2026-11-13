@@ -1,12 +1,5 @@
 const livroService = require("../services/livroService");
 
-// Adicionado o 'async' aqui na frente da função
-async function listarLivros(req, res) {
-  // throw new Error("Teste de erro 500");
-  const filtros = req.query;
-  
-  // Adicionado o 'await' aqui para esperar o banco responder
-
 async function listarLivros(req, res) {
   const filtros = req.query;
 
@@ -74,7 +67,7 @@ async function atualizarParcial(req, res) {
 
 async function deletar(req, res) {
   const { id } = req.params;
-  const apagou =  await livroService.deletarLivro(id);
+  const apagou = await livroService.deletarLivro(id);
 
   if (!apagou) {
     return res.status(404).json({ erro: "Livro nao encontrado" });
@@ -90,7 +83,4 @@ module.exports = {
   atualizarCompleto,
   atualizarParcial,
   deletar,
-
 };
-};
-
