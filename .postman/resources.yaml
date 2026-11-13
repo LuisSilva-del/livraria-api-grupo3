@@ -1,13 +1,7 @@
-# Use this workspace to collaborate
 workspace:
   id: d817f666-318a-4344-8280-4d2374b6d53c
-
 cloudResources:
   collections:
-    ../postman/collections/Livraria API - Entrega do Bloco 3: d0f317f3-74a1-420a-934d-d91521212935
-
-# All resources in the `postman/` folder are automatically registered in Local View.
-# Point to additional files outside the `postman/` folder to register them individually. Example:
-#localResources:
-#  collections:
-#    - ../tests/E2E Test Collection/
+    ../postman/collections/Livraria API - Entrega do Bloco 3: 59118836-c38b4f98-c4bc-4e52-8025-a3f5d66da174
+  globals:
+    ../postman/globals/workspace.globals.yaml: de990754-702e-4717-8b5d-6d78edc116d0

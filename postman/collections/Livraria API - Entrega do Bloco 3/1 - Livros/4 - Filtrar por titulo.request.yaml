@@ -1,8 +1,8 @@
 $kind: http-request
-url: "{{baseUrl}}/livros?titulo=teste entrega"
+url: "{{baseUrl}}/livros?titulo=Clean Code"
 method: GET
 queryParams:
-  titulo: teste entrega
+  titulo: Clean Code
 scripts:
   - type: afterResponse
     code: |-

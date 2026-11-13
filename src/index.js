@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const { testarConexao } = require("./config/db");
 const routes = require('./routes');
 const logger = require('./middlewares/logger');
 const express = require("express");
