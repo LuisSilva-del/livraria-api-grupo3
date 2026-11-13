@@ -20,7 +20,7 @@ async function buscarCategoriaPorId(id) {
   return linhas[0];
 }
 
-async function validarCategoria(dados, completo) {
+ function validarCategoria(dados, completo) {
   if (!dados) return "Envie os dados da categoria em JSON";
 
   if (completo && !dados.nome) return "O nome e obrigatorio";
